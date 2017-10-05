@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.evernote.client.android.EvernoteOAuthActivity" />
-        <activity android:name="com.evernote.client.android.login.EvernoteLoginActivity"/>
+        <activity android:name="com.evernote.client.android.login.EvernoteLoginActivity" />
+        <activity android:name=".NotesActivity"></activity>
     </application>
 
 </manifest>

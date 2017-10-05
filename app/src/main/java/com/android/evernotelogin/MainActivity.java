@@ -2,7 +2,6 @@ package com.android.evernotelogin;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,16 +14,12 @@ import android.widget.Toast;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.asyncclient.EvernoteCallback;
 import com.evernote.client.android.asyncclient.EvernoteNoteStoreClient;
-import com.evernote.edam.error.EDAMNotFoundException;
-import com.evernote.edam.error.EDAMSystemException;
-import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteMetadata;
 import com.evernote.edam.notestore.NotesMetadataList;
 import com.evernote.edam.notestore.NotesMetadataResultSpec;
 import com.evernote.edam.type.NoteSortOrder;
 import com.evernote.edam.type.Notebook;
-import com.evernote.thrift.TException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,10 +138,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("DEBUG", "DEFAULT");
                 super.onActivityResult(requestCode, resultCode, data);
 
-                EvernoteNoteStoreClient noteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
-                //recoverNoteBooks(noteStoreClient);
+                Intent intent = new Intent(this, NotesActivity.class);
+                startActivity(intent);
 
-                recoverNotes(noteStoreClient);
+
 
                 break;
         }
