@@ -32,15 +32,16 @@ import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 
-public class NotesActivity extends AppCompatActivity {
+public class NotesActivity extends AppCompatActivity implements ItemClickListener{
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MyAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar progressBar;
     private ImageButton addButton;
     private ArrayList<String> mArrayTitles;
     private ArrayList<String> mArrayContent;
+    private ArrayList<String> mArrayContentFull;
     private int mIndexNote = 0;
     private int mNotesInPage = 0;
     private EvernoteNoteStoreClient mNoteStoreClient;
@@ -203,6 +204,7 @@ public class NotesActivity extends AppCompatActivity {
 
                 mArrayTitles = new ArrayList<String>();
                 mArrayContent = new ArrayList<String>();
+                mArrayContentFull = new ArrayList<String>();
 
                 for (NoteMetadata note : result.getNotes()) {
                     Log.d("DEBUG",note.getTitle());
@@ -226,6 +228,7 @@ public class NotesActivity extends AppCompatActivity {
 
                                 mArrayContent.add(content);
                             }
+                            mArrayContentFull.add(content);
 
                             if (mIndexNote == mNotesInPage-1){
 
@@ -248,7 +251,6 @@ public class NotesActivity extends AppCompatActivity {
                 Log.e("ERR", exception.toString());
             }
         });
-
     }
 
     private void updateAdapter() {
@@ -257,6 +259,7 @@ public class NotesActivity extends AppCompatActivity {
         mRecyclerView.setVisibility(View.VISIBLE);
 
         mAdapter = new MyAdapter(mArrayTitles, mArrayContent);
+        mAdapter.setClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
         String sortByString = "";
@@ -280,5 +283,15 @@ public class NotesActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(NotesActivity.this, "Sorted "+sortByString, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM, 0, 150);
         toast.show();
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+
+        Intent intent = new Intent(NotesActivity.this, DetailActivity.class);
+        intent.putExtra("Title", mArrayTitles.get(position));
+        intent.putExtra("Content", mArrayContentFull.get(position));
+
+        startActivity(intent);
     }
 }
