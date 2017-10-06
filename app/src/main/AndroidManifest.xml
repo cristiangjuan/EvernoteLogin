@@ -18,7 +18,8 @@
         </activity>
         <activity android:name="com.evernote.client.android.EvernoteOAuthActivity" />
         <activity android:name="com.evernote.client.android.login.EvernoteLoginActivity" />
-        <activity android:name=".NotesActivity"></activity>
+        <activity android:name=".NotesActivity" />
+        <activity android:name=".AddNoteActivity"></activity>
     </application>
 
 </manifest>

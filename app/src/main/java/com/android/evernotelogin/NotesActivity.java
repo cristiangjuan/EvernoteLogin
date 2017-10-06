@@ -1,5 +1,6 @@
 package com.android.evernotelogin;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -11,9 +12,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.evernotelogin.utils.Constants;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.asyncclient.EvernoteCallback;
 import com.evernote.client.android.asyncclient.EvernoteNoteStoreClient;
@@ -35,6 +38,7 @@ public class NotesActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar progressBar;
+    private ImageButton addButton;
     private ArrayList<String> mArrayTitles;
     private ArrayList<String> mArrayContent;
     private int mIndexNote = 0;
@@ -61,6 +65,16 @@ public class NotesActivity extends AppCompatActivity {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        addButton = (ImageButton) findViewById(R.id.add_note_btn);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(NotesActivity.this, AddNoteActivity.class);
+                startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_ADD_NOTE);
+            }
+        });
 
         mNoteStoreClient = EvernoteSession.getInstance().getEvernoteClientFactory().getNoteStoreClient();
         recoverNotes(mNoteStoreClient, NoteSortOrder.UPDATED.getValue());
@@ -108,7 +122,7 @@ public class NotesActivity extends AppCompatActivity {
                 }
                 else {
 
-                    Toast toast = Toast.makeText(NotesActivity.this, "Already sorted by modification", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(NotesActivity.this, "Already sorted by last update", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.BOTTOM, 0, 150);
                     toast.show();
                 }
@@ -142,6 +156,21 @@ public class NotesActivity extends AppCompatActivity {
         return  super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d("DEBUG", "NotesActivity - OnActivityResult");
+
+        if (requestCode == Constants.ACTIVITY_REQUEST_CODE_ADD_NOTE) {
+
+            if (resultCode == RESULT_OK) {
+
+                sortBy = SORT_BY_MODIFICATION;
+                recoverNotes(mNoteStoreClient, NoteSortOrder.UPDATED.getValue());
+            }
+        }
+    }
+
     private void recoverNotes(final EvernoteNoteStoreClient noteStoreClient, int filterType) {
 
         Log.d("DEBUG","Recovering notes by: "+sortBy);
@@ -153,7 +182,13 @@ public class NotesActivity extends AppCompatActivity {
 
         NoteFilter filter = new NoteFilter();
         filter.setOrder(filterType);
-        filter.setAscending(true);
+        if (filterType == NoteSortOrder.UPDATED.getValue() ) {
+
+            filter.setAscending(false);
+        }
+        else {
+            filter.setAscending(true);
+        }
 
         NotesMetadataResultSpec spec = new NotesMetadataResultSpec();
         spec.setIncludeTitle(true);
@@ -210,7 +245,7 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onException(Exception exception) {
 
-                Log.e("ERR", exception.getMessage());
+                Log.e("ERR", exception.toString());
             }
         });
 
@@ -234,7 +269,7 @@ public class NotesActivity extends AppCompatActivity {
 
             case SORT_BY_MODIFICATION:
 
-                sortByString = "by modification";
+                sortByString = "by last update";
                 break;
 
             case SORT_BY_ALPHABETICAL:
