@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_created"
+        android:title="Orden por fecha de creación"
+        android:icon="@drawable/ic_history_white_24dp"
+        app:showAsAction="ifRoom|collapseActionView" />
+
+    <item android:id="@+id/menu_modified"
+        android:title="Orden por fecha de modificación"
+        android:icon="@drawable/ic_av_timer_white_24dp"
+        app:showAsAction="ifRoom|collapseActionView" />
+
+    <item android:id="@+id/menu_alpha"
+        android:title="Orden alfabético"
+        android:icon="@drawable/ic_sort_alphabetical_white_24dp"
+        app:showAsAction="ifRoom|collapseActionView" />
+</menu>

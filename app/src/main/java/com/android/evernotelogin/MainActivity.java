@@ -67,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d("DEBUG", "NOT Logged");
         }
-
-
-
     }
 
     private void recoverNoteBooks(EvernoteNoteStoreClient noteStoreClient) {
